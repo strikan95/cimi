@@ -7,25 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Embeddable]
 class UserIdentity
 {
-    #[ORM\Column(type: "string")]
+    #[ORM\Column(type: "string", length: 64)]
     private string $sub;
 
-    #[ORM\Column(type: "string")]
+    #[ORM\Column(type: "string", length: 64)]
     private string $email;
-
-    #[ORM\Column(type: "string")]
-    private string $username;
 
     public static function build(
         string $sub,
-        string $email,
-        string $username
+        string $email
     ): UserIdentity
     {
         $_userIdentity = new self();
         $_userIdentity->sub = $sub;
         $_userIdentity->email = $email;
-        $_userIdentity->username = $username;
 
         return $_userIdentity;
     }
@@ -38,10 +33,5 @@ class UserIdentity
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function getUsername(): string
-    {
-        return $this->username;
     }
 }
