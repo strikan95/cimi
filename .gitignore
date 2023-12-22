@@ -30,6 +30,7 @@
 !bin/console
 !bin/symfony_requirements
 /vendor/
+/mysql-local/
 
 # Assets and user uploads
 /web/bundles/
