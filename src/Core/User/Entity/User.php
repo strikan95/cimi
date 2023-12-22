@@ -5,9 +5,10 @@ namespace App\Core\User\Entity;
 use App\Core\User\Entity\Embeddable\UserDetails;
 use App\Core\User\Entity\Embeddable\UserIdentity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
-class User
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,5 +41,25 @@ class User
     public function getUserDetails(): ?UserDetails
     {
         return $this->userDetails;
+    }
+
+    public function updateUserDetails(UserDetails $userDetails): void
+    {
+        $this->userDetails = $userDetails;
+    }
+
+    public function getRoles(): array
+    {
+        return [ 'ROLE_USER' ];
+    }
+
+    public function eraseCredentials()
+    {
+        return null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->userIdentity->getSub();
     }
 }
