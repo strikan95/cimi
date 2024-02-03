@@ -53,7 +53,7 @@ shell:			## Enter container shell
 	@${COMPOSE_PREFIX_CMD} docker compose exec app /bin/sh
 
 db-shell:		## Enter database container shell
-	@${COMPOSE_PREFIX_CMD} docker-compose exec db /bin/sh
+	@${COMPOSE_PREFIX_CMD} docker compose exec db /bin/sh
 
 restart:		## Restart container
 	@${COMPOSE_PREFIX_CMD} docker compose restart

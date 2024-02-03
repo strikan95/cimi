@@ -28,6 +28,11 @@ class User implements UserInterface
         return $_user;
     }
 
+    public function updateUserDetails(UserDetails $userDetails): void
+    {
+        $this->userDetails = $userDetails;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -43,20 +48,12 @@ class User implements UserInterface
         return $this->userDetails;
     }
 
-    public function updateUserDetails(UserDetails $userDetails): void
-    {
-        $this->userDetails = $userDetails;
-    }
-
     public function getRoles(): array
     {
         return [ 'ROLE_USER' ];
     }
 
-    public function eraseCredentials()
-    {
-        return null;
-    }
+    public function eraseCredentials(): void {}
 
     public function getUserIdentifier(): string
     {

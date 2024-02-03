@@ -4,3 +4,10 @@ user_controller:
         namespace: App\Core\User\Controller
     type:
         attribute
+
+listing_controller:
+    resource:
+        path: ../src/Core/Listing/Controller
+        namespace: App\Core\Listing\Controller
+    type:
+        attribute

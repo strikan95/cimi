@@ -7,6 +7,11 @@ doctrine:
         #server_version: '15'
 
         profiling_collect_backtrace: '%kernel.debug%'
+        use_savepoints: true
+        mapping_types:
+            enum: string
+        types:
+            listing_status_enum: App\ORM\CustomTypes\ListingStatusType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -21,6 +26,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Core/User/Entity'
                 prefix: 'App\Core\User\Entity'
                 alias: User
+            Listing:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/ORM/Mappings'
+                prefix: 'App\Core\Listing'
+                alias: Listing
 
 when@test:
     doctrine:
