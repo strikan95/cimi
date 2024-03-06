@@ -2,13 +2,19 @@
 
 namespace App\Core\Listing\Entity;
 
-class ListingStructure
+use Symfony\Component\Serializer\Annotation\Groups;
+
+class StructureType
 {
     private int $id;
+
+    #[Groups(['draft', 'in_listing_details'])]
     private string $name;
+
+    #[Groups(['in_listing_details'])]
     private string $iconUrl;
 
-    public static function new($id, $name, $iconUrl): ListingStructure
+    public static function new($id, $name, $iconUrl): StructureType
     {
         $_self = new self();
         $_self->id = $id;

@@ -20,6 +20,9 @@ class Listing
     private ?ListingStructure $structureType = null;
     private ?ListingLocation $location = null;
     private ?User $host = null;
+    private ?StructureType $structureType = null;
+
+    private ?PlaceType $placeType = null;
     private Collection $amenities;
     private string $status;
     private ?string $lastUpdatedStep = null;
@@ -76,12 +79,12 @@ class Listing
         $this->host = $host;
     }
 
-    public function getStructureType(): ?ListingStructure
+    public function getStructureType(): ?StructureType
     {
         return $this->structureType;
     }
 
-    public function setStructureType(?ListingStructure $structureType): void
+    public function setStructureType(?StructureType $structureType): void
     {
         $this->structureType = $structureType;
     }
@@ -104,5 +107,15 @@ class Listing
     public function setAmenities(Collection $amenities): void
     {
         $this->amenities = $amenities;
+    }
+
+    public function getPlaceType(): ?PlaceType
+    {
+        return $this->placeType;
+    }
+
+    public function setPlaceType(?PlaceType $placeType): void
+    {
+        $this->placeType = $placeType;
     }
 }

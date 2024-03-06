@@ -2,13 +2,13 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance">
 
-    <entity name="App\Core\Listing\Entity\ListingStructure" table="structure_types">
+    <entity name="App\Core\Listing\Entity\PlaceType" table="place_types">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name" nullable="true" type="string"/>
-        <field name="iconUrl" nullable="true" type="string"/>
+        <field name="name" nullable="true" />
+        <field name="iconUrl" nullable="true" length="256"/>
     </entity>
 
 </doctrine-mapping>

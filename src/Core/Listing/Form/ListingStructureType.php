@@ -3,7 +3,7 @@
 namespace App\Core\Listing\Form;
 
 use App\Core\Listing\Entity\Listing;
-use App\Core\Listing\Entity\ListingStructure;
+use App\Core\Listing\Entity\StructureType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +18,7 @@ class ListingStructureType extends AbstractType
     {
         $builder
             ->add('structureType', EntityType::class, [
-                'class' => ListingStructure::class,
+                'class' => StructureType::class,
                 'choices' => $this->getOptions(),
                 'choice_value' => 'name'
                 //'choices' => array_map(function ($type) {
@@ -38,7 +38,7 @@ class ListingStructureType extends AbstractType
 
     public function getOptions(): array
     {
-        $types = $this->em->getRepository(ListingStructure::class)->findAll();
+        $types = $this->em->getRepository(StructureType::class)->findAll();
         return $types;
     }
 }

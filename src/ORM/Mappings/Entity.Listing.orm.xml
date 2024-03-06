@@ -17,6 +17,12 @@
         <many-to-one field="structureType" target-entity="App\Core\Listing\Entity\ListingStructure"/>
         <many-to-one field="host" target-entity="App\Core\User\Entity\User" inversed-by="listings" />
 
+        <one-to-many field="images" target-entity="App\Core\Listing\Entity\Image" mapped-by="listing" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
         <many-to-many field="amenities" target-entity="App\Core\Listing\Entity\Amenity"/>
     </entity>
 
