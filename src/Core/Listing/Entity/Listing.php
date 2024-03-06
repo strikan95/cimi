@@ -20,15 +20,19 @@ class Listing
     private ?ListingStructure $structureType = null;
     private ?ListingLocation $location = null;
     private ?User $host = null;
+    private ?string $coverImageUrl = null;
+
     private ?StructureType $structureType = null;
 
     private ?PlaceType $placeType = null;
+    private Collection $images;
     private Collection $amenities;
     private string $status;
     private ?string $lastUpdatedStep = null;
 
     public function __construct()
     {
+        $this->images = new ArrayCollection();
         $this->amenities = new ArrayCollection();
         $this->location = new ListingLocation();
         $this->status = ListingStatusType::STATUS_DRAFT;
@@ -97,6 +101,23 @@ class Listing
     public function setLastUpdatedStep(?string $lastUpdatedStep): void
     {
         $this->lastUpdatedStep = $lastUpdatedStep;
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): void
+    {
+        $image->setListing($this);
+        $this->images->add($image);
+    }
+
+    public function removeImage(Image $image): bool
+    {
+        $image->setListing(null);
+        return $this->images->removeElement($image);
     }
 
     public function getAmenities(): Collection
