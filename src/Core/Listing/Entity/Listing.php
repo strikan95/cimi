@@ -6,6 +6,8 @@ use App\Core\Listing\Entity\Embeddable\ListingLocation;
 use App\Core\User\Entity\User;
 use App\ORM\CustomTypes\ListingStatusType;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Listing
@@ -18,11 +20,13 @@ class Listing
     private ?ListingStructure $structureType = null;
     private ?ListingLocation $location = null;
     private ?User $host = null;
+    private Collection $amenities;
     private string $status;
     private ?string $lastUpdatedStep = null;
 
     public function __construct()
     {
+        $this->amenities = new ArrayCollection();
         $this->location = new ListingLocation();
         $this->status = ListingStatusType::STATUS_DRAFT;
     }
@@ -90,5 +94,15 @@ class Listing
     public function setLastUpdatedStep(?string $lastUpdatedStep): void
     {
         $this->lastUpdatedStep = $lastUpdatedStep;
+    }
+
+    public function getAmenities(): Collection
+    {
+        return $this->amenities;
+    }
+
+    public function setAmenities(Collection $amenities): void
+    {
+        $this->amenities = $amenities;
     }
 }

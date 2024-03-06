@@ -16,6 +16,8 @@
 
         <many-to-one field="structureType" target-entity="App\Core\Listing\Entity\ListingStructure"/>
         <many-to-one field="host" target-entity="App\Core\User\Entity\User" inversed-by="listings" />
+
+        <many-to-many field="amenities" target-entity="App\Core\Listing\Entity\Amenity"/>
     </entity>
 
 </doctrine-mapping>
