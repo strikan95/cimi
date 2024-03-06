@@ -6,16 +6,28 @@ use App\Core\Listing\Entity\Embeddable\ListingLocation;
 use App\Core\User\Entity\User;
 use App\ORM\CustomTypes\ListingStatusType;
 
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Listing
 {
+    #[Groups(['draft', 'list', 'listing_details'])]
     private ?int $id = null;
-    #[Assert\Length(min: 10)]
+
+    private User $host;
+
+    #[Groups(['draft', 'list', 'listing_details'])]
+    #[Assert\NotBlank(groups: ['title', 'all'])]
+    #[Assert\Length(max: 32, groups: ['title', 'all'])]
     private ?string $title = null;
-    #[Assert\Length(min: 10)]
+
+    #[Groups(['draft', 'listing_details'])]
+    #[Assert\NotBlank(groups: ['description', 'all'])]
+    #[Assert\Length(max: 48, groups: ['description', 'all'])]
     private ?string $description = null;
 
     #[Groups(['list', 'listing_details'])]
@@ -30,6 +42,7 @@ class Listing
     #[Groups(['draft', 'listing_details'])]
     private ?StructureType $structureType = null;
 
+    #[Groups(['draft', 'listing_details'])]
     private ?PlaceType $placeType = null;
 
     #[Groups(['draft', 'listing_details'])]
@@ -37,16 +50,20 @@ class Listing
 
     #[Groups(['draft', 'listing_details'])]
     private Collection $amenities;
-    private string $status;
-    private ?string $lastUpdatedStep = null;
 
-    public function __construct()
+    private string $status;
+
+    #[Groups(['draft'])]
+    private string $lastUpdatedStep;
+
+    public function __construct(User $host)
     {
         $this->host = $host;
         $this->images = new ArrayCollection();
         $this->amenities = new ArrayCollection();
         $this->location = new ListingLocation();
         $this->status = ListingStatusType::STATUS_DRAFT;
+        $this->lastUpdatedStep = 'init';
     }
 
     public function getId(): ?int
@@ -84,12 +101,12 @@ class Listing
         $this->location = $location;
     }
 
-    public function getHost(): ?User
+    public function getHost(): User
     {
         return $this->host;
     }
 
-    public function setHost(?User $host): void
+    public function setHost(User $host): void
     {
         $this->host = $host;
     }
@@ -104,12 +121,12 @@ class Listing
         $this->structureType = $structureType;
     }
 
-    public function getLastUpdatedStep(): ?string
+    public function getLastUpdatedStep(): string
     {
         return $this->lastUpdatedStep;
     }
 
-    public function setLastUpdatedStep(?string $lastUpdatedStep): void
+    public function setLastUpdatedStep(string $lastUpdatedStep): void
     {
         $this->lastUpdatedStep = $lastUpdatedStep;
     }
@@ -139,6 +156,36 @@ class Listing
     public function setAmenities(Collection $amenities): void
     {
         $this->amenities = $amenities;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getCoverImageUrl(): ?string
+    {
+        return $this->coverImageUrl;
+    }
+
+    public function setCoverImageUrl(?string $coverImageUrl): void
+    {
+        $this->coverImageUrl = $coverImageUrl;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): void
+    {
+        $this->price = $price;
     }
 
     public function getPlaceType(): ?PlaceType
