@@ -1,3 +1,4 @@
+.env.local
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
@@ -36,9 +37,11 @@
 /web/bundles/
 /web/uploads/
 
-# PHPUnit
+###> phpunit/phpunit ###
 /app/phpunit.xml
 /phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
 
 # Build data
 /build/
@@ -52,12 +55,4 @@
 # Embedded web-server pid file
 /.web-server-pid
 
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+/node_modules/*
