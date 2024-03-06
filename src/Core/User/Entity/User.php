@@ -6,6 +6,7 @@ use App\Core\User\Entity\Embeddable\UserDetails;
 use App\Core\User\Entity\Embeddable\UserIdentity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 class User implements UserInterface
@@ -26,6 +27,11 @@ class User implements UserInterface
         $_user = new self();
         $_user->userIdentity = $userIdentity;
         return $_user;
+    }
+
+    public function setUserIdentity(UserIdentity $userIdentity): void
+    {
+        $this->userIdentity = $userIdentity;
     }
 
     public function updateUserDetails(UserDetails $userDetails): void
