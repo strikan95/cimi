@@ -17,21 +17,32 @@ class Listing
     private ?string $title = null;
     #[Assert\Length(min: 10)]
     private ?string $description = null;
-    private ?ListingStructure $structureType = null;
-    private ?ListingLocation $location = null;
-    private ?User $host = null;
+
+    #[Groups(['list', 'listing_details'])]
+    private ?int $price = null;
+
+    #[Groups(['draft', 'list'])]
     private ?string $coverImageUrl = null;
 
+    #[Groups(['draft', 'list'])]
+    private ListingLocation $location;
+
+    #[Groups(['draft', 'listing_details'])]
     private ?StructureType $structureType = null;
 
     private ?PlaceType $placeType = null;
+
+    #[Groups(['draft', 'listing_details'])]
     private Collection $images;
+
+    #[Groups(['draft', 'listing_details'])]
     private Collection $amenities;
     private string $status;
     private ?string $lastUpdatedStep = null;
 
     public function __construct()
     {
+        $this->host = $host;
         $this->images = new ArrayCollection();
         $this->amenities = new ArrayCollection();
         $this->location = new ListingLocation();

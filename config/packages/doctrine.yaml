@@ -12,6 +12,7 @@ doctrine:
             enum: string
         types:
             listing_status_enum: App\ORM\CustomTypes\ListingStatusType
+            geometry: App\ORM\CustomTypes\GeometryType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -32,7 +33,10 @@ doctrine:
                 dir: '%kernel.project_dir%/src/ORM/Mappings'
                 prefix: 'App\Core\Listing'
                 alias: Listing
-
+        dql:
+            numeric_functions:
+                ST_Distance: App\ORM\CustomFunctions\StDistance
+                ST_GeomFromText: App\ORM\CustomFunctions\StGeomFromText
 when@test:
     doctrine:
         dbal:

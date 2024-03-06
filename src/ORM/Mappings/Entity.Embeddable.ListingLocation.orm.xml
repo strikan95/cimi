@@ -3,11 +3,14 @@
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance">
 
     <embeddable name="App\Core\Listing\Entity\Embeddable\ListingLocation">
-        <field name="country" nullable="true" type="string" length="50" />
-        <field name="city" nullable="true" type="string" length="50" />
-        <field name="zipCode" nullable="true" />
-        <field name="street" nullable="true" />
-        <field name="streetNumber" nullable="true" />
+        <field name="country"/>
+        <field name="city"/>
+        <field name="postCode"/>
+        <field name="street"/>
+        <field name="streetNumber"/>
+        <field name="latitude" type="float"/>
+        <field name="longitude" type="float"/>
+        <field name="coordinates" type="geometry"/>
     </embeddable>
 
 </doctrine-mapping>
