@@ -6,6 +6,7 @@ use App\Core\User\Entity\Embeddable\UserDetails;
 use App\Core\User\Entity\Embeddable\UserIdentity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 class User implements UserInterface
@@ -28,6 +29,16 @@ class User implements UserInterface
         return $_user;
     }
 
+    public function setUserIdentity(UserIdentity $userIdentity): void
+    {
+        $this->userIdentity = $userIdentity;
+    }
+
+    public function updateUserDetails(UserDetails $userDetails): void
+    {
+        $this->userDetails = $userDetails;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -43,20 +54,12 @@ class User implements UserInterface
         return $this->userDetails;
     }
 
-    public function updateUserDetails(UserDetails $userDetails): void
-    {
-        $this->userDetails = $userDetails;
-    }
-
     public function getRoles(): array
     {
         return [ 'ROLE_USER' ];
     }
 
-    public function eraseCredentials()
-    {
-        return null;
-    }
+    public function eraseCredentials(): void {}
 
     public function getUserIdentifier(): string
     {
