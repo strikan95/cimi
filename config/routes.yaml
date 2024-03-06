@@ -5,6 +5,13 @@ user_controller:
     type:
         attribute
 
+search_controller:
+    resource:
+        path: ../src/Core/Search/Controller
+        namespace: App\Core\Search\Controller
+    type:
+        attribute
+
 listing_controller:
     resource:
         path: ../src/Core/Listing/Controller
