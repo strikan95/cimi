@@ -20,7 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Utils\EventListener\ExceptionListener:
+    App\Shared\ExceptionHandling\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
