@@ -5,6 +5,20 @@ user_controller:
     type:
         attribute
 
+host_controller:
+    resource:
+        path: ../src/Core/Host/Controller
+        namespace: App\Core\Host\Controller
+    type:
+        attribute
+
+renting_controller:
+    resource:
+        path: ../src/Core/Renting/Controller
+        namespace: App\Core\Renting\Controller
+    type:
+        attribute
+
 search_controller:
     resource:
         path: ../src/Core/Search/Controller

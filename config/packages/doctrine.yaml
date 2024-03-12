@@ -10,6 +10,7 @@ doctrine:
         use_savepoints: true
         mapping_types:
             enum: string
+            geometry: geometry
         types:
             listing_status_enum: App\ORM\CustomTypes\ListingStatusType
             geometry: App\ORM\CustomTypes\GeometryType
@@ -30,9 +31,15 @@ doctrine:
             Listing:
                 type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/ORM/Mappings'
+                dir: '%kernel.project_dir%/src/ORM/Mappings/Listing'
                 prefix: 'App\Core\Listing'
                 alias: Listing
+            Renting:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/ORM/Mappings/Renting'
+                prefix: 'App\Core\Renting'
+                alias: Renting
         dql:
             numeric_functions:
                 ST_Distance: App\ORM\CustomFunctions\StDistance

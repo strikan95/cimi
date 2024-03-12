@@ -3,6 +3,8 @@
 namespace App\Core\Listing\Controller;
 
 use App\Core\Listing\Entity\Listing;
+use App\Core\Listing\Repository\ListingRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,20 +17,28 @@ class ListingController extends AbstractController
     private readonly array $serializationContext;
 
     public function __construct(
-        private EntityManagerInterface $em
-    ){
+        private EntityManagerInterface $em,
+        private ListingRepository $listingRepository,
+    ) {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
             ->withGroups(['listing_details', 'in_listing_details'])
             ->toArray();
     }
 
-    #[Route('/api/v1/listings/{listing}', name: 'api.v1.listings.get', methods: ['GET'])]
-    public function getById(Listing $listing): JsonResponse
+    #[
+        Route(
+            '/api/v1/listings/{id}',
+            name: 'api.v1.listings.get',
+            methods: ['GET'],
+        ),
+    ]
+    public function getById(int $id): JsonResponse
     {
+        $listing = $this->listingRepository->fetchListingDetails($id);
         return $this->json(
             $listing,
             Response::HTTP_OK,
-            context: $this->serializationContext
+            context: $this->serializationContext,
         );
     }
 }

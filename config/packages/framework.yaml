@@ -13,6 +13,10 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+    serializer:
+        default_context:
+            datetime_format: 'Y-m-d'
+
     #esi: true
     #fragments: true
     php_errors:

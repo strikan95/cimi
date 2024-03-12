@@ -3,14 +3,12 @@
 namespace App\Core\Listing\Entity;
 
 use App\Core\Listing\Entity\Embeddable\ListingLocation;
+use App\Core\Renting\Entity\RentPeriod;
 use App\Core\User\Entity\User;
-use App\ORM\CustomTypes\ListingStatusType;
-
-
+use App\Shared\ORM\ListingStatus\ListingStatusType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Listing
@@ -51,6 +49,9 @@ class Listing
     #[Groups(['draft', 'listing_details'])]
     private Collection $amenities;
 
+    #[Groups(['draft', 'listing_details'])]
+    private Collection $rentPeriods;
+
     private string $status;
 
     #[Groups(['draft'])]
@@ -60,6 +61,7 @@ class Listing
     {
         $this->host = $host;
         $this->images = new ArrayCollection();
+        $this->rentPeriods = new ArrayCollection();
         $this->amenities = new ArrayCollection();
         $this->location = new ListingLocation();
         $this->status = ListingStatusType::STATUS_DRAFT;
@@ -196,5 +198,37 @@ class Listing
     public function setPlaceType(?PlaceType $placeType): void
     {
         $this->placeType = $placeType;
+    }
+
+    public function getRentPeriods(): Collection
+    {
+        return $this->rentPeriods;
+    }
+
+    private function canAddRentPeriod(RentPeriod $period): bool
+    {
+        foreach ($this->rentPeriods as $rentPeriod) {
+            if ($period->getEndDate() >= $rentPeriod->getStartDate()) {
+                if ($period->getStartDate() <= $rentPeriod->getEndDate()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function addRentPeriod(RentPeriod $period): void
+    {
+        if (!$this->canAddRentPeriod($period)) {
+            throw new \Exception('rent period clashes');
+        }
+
+        $this->rentPeriods[] = $period;
+        $period->setListing($this);
+    }
+
+    public function setRentPeriods(Collection $rentPeriods): void
+    {
+        $this->rentPeriods = $rentPeriods;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Core\Listing\Entity\Embeddable;
 
-use App\Utils\Geom\Point;
+use App\Shared\ORM\Spatial\PhpObject\Point;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class ListingLocation

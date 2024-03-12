@@ -2,14 +2,14 @@
 
 namespace App\Core\Listing\Controller;
 
+use App\Core\Listing\DraftBuildSteps;
 use App\Core\Listing\Entity\Image;
 use App\Core\Listing\Entity\Listing;
 use App\Core\Listing\Form\DraftType;
 use App\Core\Listing\Form\ImageType;
-use App\Core\Listing\DraftBuildSteps;
 use App\Core\User\Entity\User;
-use App\Services\FileUploaderInterface;
-use App\Utils\Exception\ValidationException;
+use App\Shared\ExceptionHandling\Exception\ValidationException;
+use App\Shared\Service\FileUploader\FileUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -26,14 +26,20 @@ class DraftController extends AbstractController
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SerializerInterface $serializer
-    ){
+        private SerializerInterface $serializer,
+    ) {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
             ->withGroups(['draft', 'amenities_in_draft'])
             ->toArray();
     }
 
-    #[Route('/api/v1/draft/{draft}', name: 'api.v1.draft.get', methods: ['GET'])]
+    #[
+        Route(
+            '/api/v1/draft/{draft}',
+            name: 'api.v1.draft.get',
+            methods: ['GET'],
+        ),
+    ]
     public function getDraft(Listing $draft): JsonResponse
     {
         return $this->createApiSuccessResponse($draft);
@@ -49,46 +55,95 @@ class DraftController extends AbstractController
         $this->em->persist($draft);
         $this->em->flush();
 
-        return $this->json(
+        return $this->json($draft, Response::HTTP_OK);
+    }
+
+    #[
+        Route(
+            '/api/v1/draft/{draft}/structure-type',
+            name: 'api.v1.draft.structure',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function updateStructureType(
+        Request $request,
+        Listing $draft,
+    ): JsonResponse {
+        return $this->resolveStep(
+            DraftBuildSteps::StructureType,
             $draft,
-            Response::HTTP_OK
+            $request,
         );
     }
 
-    #[Route('/api/v1/draft/{draft}/structure-type', name: 'api.v1.draft.structure', methods: ['PATCH'])]
-    public function updateStructureType(Request $request, Listing $draft): JsonResponse
-    {
-        return $this->resolveStep(DraftBuildSteps::StructureType, $draft, $request);
-    }
-
-    #[Route('/api/v1/draft/{draft}/title', name: 'api.v1.draft.title', methods: ['PATCH'])]
+    #[
+        Route(
+            '/api/v1/draft/{draft}/title',
+            name: 'api.v1.draft.title',
+            methods: ['PATCH'],
+        ),
+    ]
     public function updateTitle(Request $request, Listing $draft): JsonResponse
     {
         return $this->resolveStep(DraftBuildSteps::Title, $draft, $request);
     }
 
-    #[Route('/api/v1/draft/{draft}/description', name: 'api.v1.draft.description', methods: ['PATCH'])]
-    public function updateDescription(Request $request, Listing $draft): JsonResponse
-    {
-        return $this->resolveStep(DraftBuildSteps::Description, $draft, $request);
+    #[
+        Route(
+            '/api/v1/draft/{draft}/description',
+            name: 'api.v1.draft.description',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function updateDescription(
+        Request $request,
+        Listing $draft,
+    ): JsonResponse {
+        return $this->resolveStep(
+            DraftBuildSteps::Description,
+            $draft,
+            $request,
+        );
     }
 
-    #[Route('/api/v1/draft/{draft}/location', name: 'api.v1.draft.location', methods: ['PATCH'])]
-    public function updateLocation(Request $request, Listing $draft): JsonResponse
-    {
+    #[
+        Route(
+            '/api/v1/draft/{draft}/location',
+            name: 'api.v1.draft.location',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function updateLocation(
+        Request $request,
+        Listing $draft,
+    ): JsonResponse {
         $data = [
-            'location' => json_decode($request->getContent(), true)
+            'location' => json_decode($request->getContent(), true),
         ];
         return $this->resolveStep(DraftBuildSteps::Location, $draft, $data);
     }
 
-    #[Route('/api/v1/draft/{draft}/amenities', name: 'api.v1.draft.amenities', methods: ['PATCH'])]
-    public function updateAmenities(Request $request, Listing $draft): JsonResponse
-    {
+    #[
+        Route(
+            '/api/v1/draft/{draft}/amenities',
+            name: 'api.v1.draft.amenities',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function updateAmenities(
+        Request $request,
+        Listing $draft,
+    ): JsonResponse {
         return $this->resolveStep(DraftBuildSteps::Location, $draft, $request);
     }
 
-    #[Route('/api/v1/draft/{draft}/image', name: 'api.v1.draft.image.get', methods: ['GET'])]
+    #[
+        Route(
+            '/api/v1/draft/{draft}/image',
+            name: 'api.v1.draft.image.get',
+            methods: ['GET'],
+        ),
+    ]
     public function getImages(Listing $draft): JsonResponse
     {
         return $this->json(
@@ -97,11 +152,17 @@ class DraftController extends AbstractController
             headers: ['Content-Type' => 'application/json'],
             context: (new ObjectNormalizerContextBuilder())
                 ->withGroups(['draft', 'amenities_in_draft'])
-                ->toArray()
+                ->toArray(),
         );
     }
 
-    #[Route('/api/v1/draft/{draft}/image', name: 'api.v1.draft.image.add', methods: ['POST'])]
+    #[
+        Route(
+            '/api/v1/draft/{draft}/image',
+            name: 'api.v1.draft.image.add',
+            methods: ['POST'],
+        ),
+    ]
     public function addImage(Request $request, Listing $draft): JsonResponse
     {
         $form = $this->createForm(ImageType::class, new Image());
@@ -119,14 +180,26 @@ class DraftController extends AbstractController
         return $this->createApiSuccessResponse($image);
     }
 
-    #[Route('/api/v1/draft/{draft}/image/{image}', name: 'api.v1.draft.image.delete', methods: ['DELETE'])]
-    public function removeImage(Listing $draft, Image $image, FileUploaderInterface $fileUploader): JsonResponse
-    {
-        if(!$draft->removeImage($image)) {
+    #[
+        Route(
+            '/api/v1/draft/{draft}/image/{image}',
+            name: 'api.v1.draft.image.delete',
+            methods: ['DELETE'],
+        ),
+    ]
+    public function removeImage(
+        Listing $draft,
+        Image $image,
+        FileUploaderInterface $fileUploader,
+    ): JsonResponse {
+        if (!$draft->removeImage($image)) {
             // Todo throw not found.
         }
 
-        $res = $fileUploader->getUploader()->uploadApi()->destroy($image->getId());
+        $res = $fileUploader
+            ->getUploader()
+            ->uploadApi()
+            ->destroy($image->getId());
         if ($res['result'] !== 'ok') {
             // Todo throw unable to remove image error
         }
@@ -137,16 +210,19 @@ class DraftController extends AbstractController
         return $this->json(
             ['message' => 'ok'],
             Response::HTTP_OK,
-            headers: ['Content-Type' => 'application/json']
+            headers: ['Content-Type' => 'application/json'],
         );
     }
 
-    private function resolveStep(DraftBuildSteps $step, Listing $draft, Request|array $input): JsonResponse
-    {
+    private function resolveStep(
+        DraftBuildSteps $step,
+        Listing $draft,
+        Request|array $input,
+    ): JsonResponse {
         $form = $this->createForm(
             DraftType::class,
             $draft,
-            options: ['validation_groups' => $step->value]
+            options: ['validation_groups' => $step->value],
         );
 
         $this->processForm($form, $input);
@@ -161,9 +237,14 @@ class DraftController extends AbstractController
         return $this->createApiSuccessResponse($draft);
     }
 
-    private function processForm(FormInterface $form, Request|array $input): void
-    {
-        $data = $input instanceof Request ? json_decode($input->getContent(), true) : $input;
+    private function processForm(
+        FormInterface $form,
+        Request|array $input,
+    ): void {
+        $data =
+            $input instanceof Request
+                ? json_decode($input->getContent(), true)
+                : $input;
         if (null === $data) {
             //todo: throw error
         }
@@ -179,7 +260,7 @@ class DraftController extends AbstractController
 
     private function resolveFormErrors(FormInterface $form): array
     {
-        $errors = array();
+        $errors = [];
         foreach ($form->getErrors() as $error) {
             $errors[] = $error->getMessage();
         }
@@ -193,13 +274,14 @@ class DraftController extends AbstractController
         return $errors;
     }
 
-    private function createApiSuccessResponse(object|array $entity): JsonResponse
-    {
+    private function createApiSuccessResponse(
+        object|array $entity,
+    ): JsonResponse {
         return $this->json(
             $entity,
             Response::HTTP_OK,
             headers: ['Content-Type' => 'application/json'],
-            context: $this->serializationContext
+            context: $this->serializationContext,
         );
     }
 }
