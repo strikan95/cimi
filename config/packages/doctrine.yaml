@@ -12,8 +12,8 @@ doctrine:
             enum: string
             geometry: geometry
         types:
-            listing_status_enum: App\ORM\CustomTypes\ListingStatusType
-            geometry: App\ORM\CustomTypes\GeometryType
+            listing_status_enum: App\Shared\ORM\ListingStatus\ListingStatusType
+            geometry: App\Shared\ORM\Spatial\DoctrineType\GeometryType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -42,8 +42,8 @@ doctrine:
                 alias: Renting
         dql:
             numeric_functions:
-                ST_Distance: App\ORM\CustomFunctions\StDistance
-                ST_GeomFromText: App\ORM\CustomFunctions\StGeomFromText
+                ST_Distance: App\Shared\ORM\Spatial\Functions\StDistance
+                ST_GeomFromText: App\Shared\ORM\Spatial\Functions\StGeomFromText
 when@test:
     doctrine:
         dbal:
