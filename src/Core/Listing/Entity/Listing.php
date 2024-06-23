@@ -17,6 +17,7 @@ class Listing
     #[Groups(['draft', 'list', 'listing_details'])]
     private ?int $id = null;
 
+    #[Groups(['host'])]
     private User $host;
 
     #[Groups(['draft', 'list', 'listing_details'])]

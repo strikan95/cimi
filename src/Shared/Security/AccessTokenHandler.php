@@ -14,6 +14,8 @@ use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Validator;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use GetStream\StreamChat\Client as GetStreamClient;
+use GetStream\StreamChat\StreamResponse;
 
 class AccessTokenHandler implements AccessTokenHandlerInterface
 {
@@ -21,10 +23,17 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
 
     private Validator $tokenValidator;
 
+    private GetStreamClient $getStreamClient;
+
     public function __construct(private EntityManagerInterface $em)
     {
         $this->tokenParser = new Parser(new JoseEncoder());
         $this->tokenValidator = new Validator();
+
+        $this->getStreamClient = new GetStreamClient(
+            $_SERVER['GET_STREAM_KEY'],
+            $_SERVER['GET_STREAM_SECRET'],
+        );
     }
 
     /**
@@ -56,6 +65,16 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
 
             $this->em->persist($user);
             $this->em->flush();
+
+            $this->getStreamClient->upsertUser([
+                'id' => str_replace(
+                    '|',
+                    '_',
+                    $user->getUserIdentity()->getSub(),
+                ),
+                'role' => 'user',
+                'name' => 'Djuro' . ' ' . 'Peric',
+            ]);
         }
 
         return new UserBadge($user->getUserIdentifier());

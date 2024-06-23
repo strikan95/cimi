@@ -3,20 +3,19 @@
 namespace App\Core\User\Entity\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Embeddable]
 class UserIdentity
 {
-    #[ORM\Column(type: "string", length: 64)]
+    #[ORM\Column(type: 'string', length: 64)]
+    #[Groups(['host'])]
     private string $sub;
 
-    #[ORM\Column(type: "string", length: 64)]
+    #[ORM\Column(type: 'string', length: 64)]
     private string $email;
 
-    public static function build(
-        string $sub,
-        string $email
-    ): UserIdentity
+    public static function build(string $sub, string $email): UserIdentity
     {
         $_userIdentity = new self();
         $_userIdentity->sub = $sub;

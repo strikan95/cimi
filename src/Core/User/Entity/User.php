@@ -17,6 +17,7 @@ class User implements UserInterface
     private ?int $id = null;
 
     #[ORM\Embedded(class: UserIdentity::class, columnPrefix: false)]
+    #[Groups(['host'])]
     private UserIdentity $userIdentity;
 
     #[ORM\Embedded(class: UserDetails::class, columnPrefix: false)]
@@ -56,10 +57,12 @@ class User implements UserInterface
 
     public function getRoles(): array
     {
-        return [ 'ROLE_USER' ];
+        return ['ROLE_USER'];
     }
 
-    public function eraseCredentials(): void {}
+    public function eraseCredentials(): void
+    {
+    }
 
     public function getUserIdentifier(): string
     {

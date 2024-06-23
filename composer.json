@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.3",
+        "get-stream/stream-chat": "^3.4",
         "lcobucci/jwt": "^5.2",
         "ramsey/uuid": "^4.7",
         "symfony/console": "6.4.*",
