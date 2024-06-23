@@ -2,17 +2,23 @@
 
 namespace App\Core\Host\Controller;
 
-use App\Core\Host\Repository\HostListingRepository;
+use App\Core\Host\Repository\HostRepository;
 use App\Core\User\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
-class HostListingController extends AbstractController
+class HostController extends AbstractController
 {
-    public function __construct(private HostListingRepository $repository)
+    private readonly array $serializationContext;
+
+    public function __construct(private HostRepository $repository)
     {
+        $this->serializationContext = (new ObjectNormalizerContextBuilder())
+            ->withGroups(['draft'])
+            ->toArray();
     }
 
     #[
@@ -32,6 +38,10 @@ class HostListingController extends AbstractController
 
         $listings = $this->repository->fetchHostListings($id);
 
-        return $this->json($listings, Response::HTTP_OK);
+        return $this->json(
+            $listings,
+            Response::HTTP_OK,
+            context: $this->serializationContext,
+        );
     }
 }

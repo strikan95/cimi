@@ -38,6 +38,7 @@ class ListingLocation
         $self->postCode = '';
         $self->street = '';
         $self->streetNumber = '';
+        $self->coordinates = new Point(0, 0);
         $self->longitude = 0;
         $self->latitude = 0;
         return $self;

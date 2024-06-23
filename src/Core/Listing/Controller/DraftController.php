@@ -5,6 +5,7 @@ namespace App\Core\Listing\Controller;
 use App\Core\Listing\DraftBuildSteps;
 use App\Core\Listing\Entity\Image;
 use App\Core\Listing\Entity\Listing;
+use App\Core\Listing\Entity\StructureType;
 use App\Core\Listing\Form\DraftType;
 use App\Core\Listing\Form\ImageType;
 use App\Core\User\Entity\User;
@@ -55,7 +56,11 @@ class DraftController extends AbstractController
         $this->em->persist($draft);
         $this->em->flush();
 
-        return $this->json($draft, Response::HTTP_OK);
+        return $this->json(
+            $draft,
+            Response::HTTP_OK,
+            context: $this->serializationContext,
+        );
     }
 
     #[
@@ -69,6 +74,7 @@ class DraftController extends AbstractController
         Request $request,
         Listing $draft,
     ): JsonResponse {
+        $vla = $request->getContent();
         return $this->resolveStep(
             DraftBuildSteps::StructureType,
             $draft,
@@ -134,7 +140,7 @@ class DraftController extends AbstractController
         Request $request,
         Listing $draft,
     ): JsonResponse {
-        return $this->resolveStep(DraftBuildSteps::Location, $draft, $request);
+        return $this->resolveStep(DraftBuildSteps::Amenities, $draft, $request);
     }
 
     #[

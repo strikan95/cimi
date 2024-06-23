@@ -10,11 +10,11 @@ class PlaceTypeFixture extends BaseFixture
     private static array $placeTypes = [
         [
             'A room',
-            'https://res.cloudinary.com/daxjoycqb/image/upload/v1707391902/home_orfifl.svg',
+            'https://res.cloudinary.com/daxjoycqb/image/upload/v1707391902/icons/home_orfifl.svg',
         ],
         [
             'Whole place',
-            'https://res.cloudinary.com/daxjoycqb/image/upload/v1707392042/building_rrsxgv.svg',
+            'https://res.cloudinary.com/daxjoycqb/image/upload/v1707392042/icons/building_rrsxgv.svg',
         ],
     ];
 

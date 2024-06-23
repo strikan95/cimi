@@ -12,7 +12,7 @@ class UserFixture extends BaseFixture
 {
     protected function loadData(ObjectManager $manager): void
     {
-        $this->createMany(User::class, 30, function (User $user, $count) {
+        $this->createMany(User::class, 300, function (User $user, $count) {
             if ($count == 0) {
                 $user->setUserIdentity(
                     UserIdentity::build(

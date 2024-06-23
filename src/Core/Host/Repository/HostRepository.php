@@ -6,7 +6,7 @@ use App\Core\Listing\Entity\Listing;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class HostListingRepository extends ServiceEntityRepository
+class HostRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -15,6 +15,8 @@ class HostListingRepository extends ServiceEntityRepository
 
     public function fetchHostListings(int $id)
     {
+        return $this->findBy(['host' => $id]);
+
         $qb = $this->createQueryBuilder('l');
         return $qb
             ->select('l.id, l.title, l.description, l.coverImageUrl, l.status')

@@ -48,7 +48,7 @@ class ListingFixture extends BaseFixture implements DependentFixtureInterface
 
     protected function loadData(ObjectManager $manager): void
     {
-        $this->createManyAlternative(200, function () {
+        $this->createManyAlternative(300, function () {
             $propertyListing = new Listing(
                 $this->getRandomReference(User::class),
             );
@@ -72,7 +72,7 @@ class ListingFixture extends BaseFixture implements DependentFixtureInterface
                 $propertyListing->addImage($this->generateRandomImage());
             }
 
-            foreach ($this->generateNRandomRentPeriod(0, 6) as $rentPeriod) {
+            foreach ($this->generateNRandomRentPeriod(0, 3) as $rentPeriod) {
                 $propertyListing->addRentPeriod($rentPeriod);
             }
 

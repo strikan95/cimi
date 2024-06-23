@@ -6,6 +6,7 @@ use App\Core\Listing\Entity\Embeddable\ListingLocation;
 use App\Core\Renting\Entity\RentPeriod;
 use App\Core\User\Entity\User;
 use App\Shared\ORM\ListingStatus\ListingStatusType;
+use App\Shared\ORM\Spatial\PhpObject\Point;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,18 +22,18 @@ class Listing
     #[Groups(['draft', 'list', 'listing_details'])]
     #[Assert\NotBlank(groups: ['title', 'all'])]
     #[Assert\Length(max: 32, groups: ['title', 'all'])]
-    private ?string $title = null;
+    private ?string $title = '';
 
     #[Groups(['draft', 'listing_details'])]
     #[Assert\NotBlank(groups: ['description', 'all'])]
     #[Assert\Length(max: 48, groups: ['description', 'all'])]
-    private ?string $description = null;
+    private ?string $description = '';
 
     #[Groups(['list', 'listing_details'])]
-    private ?int $price = null;
+    private ?int $price = 0;
 
     #[Groups(['draft', 'list'])]
-    private ?string $coverImageUrl = null;
+    private ?string $coverImageUrl = '';
 
     #[Groups(['draft', 'list'])]
     private ListingLocation $location;
@@ -52,6 +53,7 @@ class Listing
     #[Groups(['draft', 'listing_details'])]
     private Collection $rentPeriods;
 
+    #[Groups(['draft'])]
     private string $status;
 
     #[Groups(['draft'])]
@@ -63,7 +65,7 @@ class Listing
         $this->images = new ArrayCollection();
         $this->rentPeriods = new ArrayCollection();
         $this->amenities = new ArrayCollection();
-        $this->location = new ListingLocation();
+        $this->location = ListingLocation::init();
         $this->status = ListingStatusType::STATUS_DRAFT;
         $this->lastUpdatedStep = 'init';
     }
