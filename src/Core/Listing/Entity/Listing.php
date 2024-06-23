@@ -35,7 +35,7 @@ class Listing
     #[Groups(['draft', 'list'])]
     private ?string $coverImageUrl = '';
 
-    #[Groups(['draft', 'list'])]
+    #[Groups(['draft', 'list', 'listing_details'])]
     private ListingLocation $location;
 
     #[Groups(['draft', 'listing_details'])]

@@ -22,10 +22,10 @@ class ListingLocation
     #[Groups(['draft'])]
     private string $streetNumber;
 
-    #[Groups(['draft'])]
+    #[Groups(['draft', 'listing_details'])]
     private float $latitude;
 
-    #[Groups(['draft'])]
+    #[Groups(['draft', 'listing_details'])]
     private float $longitude;
 
     private Point $coordinates;

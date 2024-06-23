@@ -220,6 +220,24 @@ class DraftController extends AbstractController
         );
     }
 
+    #[
+        Route(
+            '/api/v1/draft/{draft}/finalise',
+            name: 'api.v1.draft.finalise',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function finalise(Listing $draft): JsonResponse
+    {
+        if ($draft->getStatus() == 'draft') {
+            $draft->setStatus('approved');
+            $this->em->persist($draft);
+            $this->em->flush();
+        }
+
+        return $this->createApiSuccessResponse($draft);
+    }
+
     private function resolveStep(
         DraftBuildSteps $step,
         Listing $draft,
