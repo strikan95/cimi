@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
 
 class RentPeriod
 {
+    #[Groups(['listing_details'])]
     private ?int $id = null;
 
     #[Groups(['listing_details'])]

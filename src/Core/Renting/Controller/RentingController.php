@@ -58,7 +58,7 @@ class RentingController extends AbstractController
         $this->em->persist($listing);
         $this->em->flush();
 
-        return $this->json([$rentPeriod], Response::HTTP_OK);
+        return $this->json([], Response::HTTP_OK);
     }
 
     private function processForm(FormInterface $form, Request $input): void

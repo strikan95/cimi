@@ -77,7 +77,7 @@ class ListingQueryBuilder
             ->addOrderBy('distance');
 
         if (!array_key_exists('radius', $this->all())) {
-            $this->qb->setParameter('radius', 2);
+            $this->qb->setParameter('radius', 20);
         }
     }
 

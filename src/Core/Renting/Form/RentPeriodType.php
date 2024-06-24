@@ -20,11 +20,13 @@ class RentPeriodType extends AbstractType
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'format' => self::DATE_FORMAT,
+                'input' => 'datetime',
             ])
 
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
                 'format' => self::DATE_FORMAT,
+                'input' => 'datetime',
             ]);
     }
 

@@ -143,6 +143,9 @@ class Listing
 
     public function addImage(Image $image): void
     {
+        if ($this->images->count() <= 0) {
+            $this->coverImageUrl = $image->getUrl();
+        }
         $image->setListing($this);
         $this->images->add($image);
     }

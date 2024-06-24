@@ -102,6 +102,10 @@ class ListingLocation
     public function setLatitude(float $latitude): void
     {
         $this->latitude = $latitude;
+        $this->coordinates = new Point(
+            $latitude,
+            $this->coordinates->getLongitude(),
+        );
     }
 
     public function getLongitude(): float
@@ -112,6 +116,10 @@ class ListingLocation
     public function setLongitude(float $longitude): void
     {
         $this->longitude = $longitude;
+        $this->coordinates = new Point(
+            $this->coordinates->getLatitude(),
+            $longitude,
+        );
     }
 
     public function getCoordinates(): Point
