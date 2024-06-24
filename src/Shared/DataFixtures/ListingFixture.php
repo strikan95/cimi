@@ -132,7 +132,7 @@ class ListingFixture extends BaseFixture implements DependentFixtureInterface
 
     private function generateRandomLocation(): ListingLocation
     {
-        $location = new ListingLocation();
+        $location = ListingLocation::init();
         $location->setCountry('Croatia');
         $location->setCity('Osijek');
         $location->setPostCode(31000);
