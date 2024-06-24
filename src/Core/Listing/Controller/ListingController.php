@@ -41,4 +41,23 @@ class ListingController extends AbstractController
             context: $this->serializationContext,
         );
     }
+
+    #[
+        Route(
+            '/api/v1/listings/{id}',
+            name: 'api.v1.listings.delete',
+            methods: ['DELETE'],
+        ),
+    ]
+    public function deleteListing(Listing $listing): JsonResponse
+    {
+        $this->em->remove($listing);
+        $this->em->flush();
+
+        return $this->json(
+            ['message' => 'Listing deleted successfully'],
+            Response::HTTP_OK,
+            context: $this->serializationContext,
+        );
+    }
 }

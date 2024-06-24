@@ -33,6 +33,7 @@ class RentPeriod
 
     public function setStartDate(DateTime $startDate): void
     {
+        $startDate->modify('+1 day');
         $this->startDate = $startDate;
     }
 
@@ -43,6 +44,7 @@ class RentPeriod
 
     public function setEndDate(DateTime $endDate): void
     {
+        $endDate->modify('+1 day');
         $this->endDate = $endDate;
     }
 
