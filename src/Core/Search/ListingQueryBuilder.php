@@ -3,6 +3,7 @@
 namespace App\Core\Search;
 
 use App\Core\Listing\Entity\Listing;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +20,9 @@ class ListingQueryBuilder
         $this->qb = $this->em
             ->createQueryBuilder()
             ->select('l as listing')
-            ->from(Listing::class, 'l');
+            ->from(Listing::class, 'l')
+            //->leftJoin('l.rentPeriods', 'rp')
+            ->groupBy('l.id');
     }
 
     public function executeQuery()
@@ -30,6 +33,28 @@ class ListingQueryBuilder
     public function getQb(): QueryBuilder
     {
         return $this->qb;
+    }
+
+    private function from($value): void
+    {
+        $fromDate = new \DateTime($value);
+        $toDate = new \DateTime($value);
+        $toDate->modify('+1 day');
+
+        $this->qb
+            ->leftJoin('l.rentPeriods', 'ar')
+            ->addSelect(
+                'SUM(CASE WHEN :fromDate BETWEEN ar.startDate AND ar.endDate OR :toDate BETWEEN ar.startDate AND ar.endDate THEN 1 ELSE 0 END) AS overlapCount',
+            )
+            ->andHaving('overlapCount = 0')
+            ->setParameter('fromDate', $fromDate)
+            ->setParameter('toDate', $toDate);
+    }
+
+    private function to($value): void
+    {
+        $toDate = new \DateTime($value);
+        $this->qb->setParameter('toDate', $toDate);
     }
 
     private function hostId($id): void

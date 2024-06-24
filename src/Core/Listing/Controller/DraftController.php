@@ -222,6 +222,20 @@ class DraftController extends AbstractController
 
     #[
         Route(
+            '/api/v1/draft/{draft}/pricing',
+            name: 'api.v1.draft.pricing',
+            methods: ['PATCH'],
+        ),
+    ]
+    public function updatePricing(
+        Request $request,
+        Listing $draft,
+    ): JsonResponse {
+        return $this->resolveStep(DraftBuildSteps::Pricing, $draft, $request);
+    }
+
+    #[
+        Route(
             '/api/v1/draft/{draft}/finalise',
             name: 'api.v1.draft.finalise',
             methods: ['PATCH'],

@@ -18,9 +18,8 @@ class SearchController extends AbstractController
 {
     private readonly array $serializationContext;
 
-    public function __construct(
-        private EntityManagerInterface $em
-    ){
+    public function __construct(private EntityManagerInterface $em)
+    {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
             ->withGroups(['list'])
             ->toArray();
@@ -42,11 +41,10 @@ class SearchController extends AbstractController
         //$paginator = new Paginator($q, fetchJoinCollection: true);
         //$c = count($paginator);
 
-
         return $this->json(
             $listings,
             Response::HTTP_OK,
-            context: $this->serializationContext
+            context: $this->serializationContext,
         );
     }
 }

@@ -9,4 +9,5 @@ enum DraftBuildSteps: string
     case Location = 'location';
     case Image = 'image';
     case Amenities = 'amenities';
+    case Pricing = 'pricing';
 }
