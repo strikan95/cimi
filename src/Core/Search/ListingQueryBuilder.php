@@ -21,6 +21,8 @@ class ListingQueryBuilder
             ->createQueryBuilder()
             ->select('l as listing')
             ->from(Listing::class, 'l')
+            ->setFirstResult(0)
+            ->setMaxResults(10)
             //->leftJoin('l.rentPeriods', 'rp')
             ->groupBy('l.id');
     }
