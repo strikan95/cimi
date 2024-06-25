@@ -3,7 +3,6 @@
 namespace App\Core\Search;
 
 use App\Core\Listing\Entity\Listing;
-use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
@@ -11,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListingQueryBuilder
 {
+    public static int $PAGE_SIZE = 10;
     private QueryBuilder $qb;
 
     public function __construct(
@@ -21,9 +21,8 @@ class ListingQueryBuilder
             ->createQueryBuilder()
             ->select('l as listing')
             ->from(Listing::class, 'l')
-            ->setFirstResult(0)
-            ->setMaxResults(10)
-            //->leftJoin('l.rentPeriods', 'rp')
+            //->setFirstResult(0)
+            //->setMaxResults(self::PAGE_SIZE)
             ->groupBy('l.id');
     }
 
@@ -36,6 +35,11 @@ class ListingQueryBuilder
     {
         return $this->qb;
     }
+
+    /*    private function page($value): void
+    {
+        $this->qb->setFirstResult($value * self::PAGE_SIZE);
+    }*/
 
     private function from($value): void
     {

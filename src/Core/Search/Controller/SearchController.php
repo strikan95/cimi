@@ -30,7 +30,7 @@ class SearchController extends AbstractController
     {
         $qb = new ListingQueryBuilder($request, $this->em);
         $qb->apply();
-        $listings = $qb->executeQuery();
+        //$listings = $qb->executeQuery();
 
         //$q = $this->em->getRepository(Listing::class)
         //    ->createQueryBuilder('l')
@@ -38,11 +38,25 @@ class SearchController extends AbstractController
         //    ->setMaxResults(20)
         //    ->getQuery();
 
-        //$paginator = new Paginator($q, fetchJoinCollection: true);
-        //$c = count($paginator);
+        $paginator = new Paginator($qb->getQb(), fetchJoinCollection: true);
+        $c = count($paginator);
+        $pagesCount = ceil($c / ListingQueryBuilder::$PAGE_SIZE);
+
+        $page = 1;
+        if (array_key_exists('page', $request->query->all())) {
+            $page = $request->query->get('page');
+        }
+
+        $qb->getQb()
+            ->setFirstResult(ListingQueryBuilder::$PAGE_SIZE * ($page - 1)) // set the offset
+            ->setMaxResults(ListingQueryBuilder::$PAGE_SIZE); // set the limit
+
+        $listings = $qb->executeQuery();
+
+        $res = ['listings' => [...$listings], 'pages' => $pagesCount];
 
         return $this->json(
-            $listings,
+            $res,
             Response::HTTP_OK,
             context: $this->serializationContext,
         );
