@@ -7,7 +7,9 @@
         <field name="url"/>
         <field name="thumbnailUrl"/>
 
-        <many-to-one field="listing" target-entity="App\Core\Listing\Entity\Listing" inversed-by="images"/>
+        <many-to-one field="listing" target-entity="App\Core\Listing\Entity\Listing" inversed-by="images">
+            <join-column name="listing_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
     </entity>
 
 </doctrine-mapping>
