@@ -51,6 +51,10 @@ class ListingController extends AbstractController
     ]
     public function deleteListing(Listing $listing): JsonResponse
     {
+        if ($listing->getHost() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $this->em->remove($listing);
         $this->em->flush();
 
