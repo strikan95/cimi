@@ -177,9 +177,12 @@ class DraftController extends AbstractController
             return $this->createValidationErrorResponse($form);
         }
 
+        /** @var Image $image */
         $image = $form->getData();
 
-        $draft->addImage($image);
+        /** @var User $user */
+        $user = $this->setPicture($image->getUrl());
+
         $this->em->persist($draft);
         $this->em->flush();
 

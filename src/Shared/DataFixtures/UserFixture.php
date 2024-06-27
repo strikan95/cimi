@@ -20,11 +20,13 @@ class UserFixture extends BaseFixture
                         $_SERVER['ADMIN_EMAIL'],
                     ),
                 );
+                $user->setRole('ROLE_HOST');
                 $userDetails = new UserDetailsData();
                 $userDetails->firstName = $this->faker->firstName();
                 $userDetails->lastName = $this->faker->lastName();
                 $user->updateUserDetails(UserDetails::build($userDetails));
             } else {
+                $user->setRole('ROLE_HOST');
                 $user->setUserIdentity(
                     UserIdentity::build(
                         $this->faker->sentence(2),
