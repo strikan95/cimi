@@ -16,6 +16,12 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column]
+    private string $role;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $picture = null;
+
     #[ORM\Embedded(class: UserIdentity::class, columnPrefix: false)]
     #[Groups(['host'])]
     private UserIdentity $userIdentity;
@@ -26,6 +32,8 @@ class User implements UserInterface
     public static function register(UserIdentity $userIdentity): User
     {
         $_user = new self();
+        $_user->role = 'ROLE_NEW';
+
         $_user->userIdentity = $userIdentity;
         return $_user;
     }
@@ -55,9 +63,14 @@ class User implements UserInterface
         return $this->userDetails;
     }
 
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
+    }
+
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return [$this->role];
     }
 
     public function eraseCredentials(): void
@@ -67,5 +80,15 @@ class User implements UserInterface
     public function getUserIdentifier(): string
     {
         return $this->userIdentity->getSub();
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): void
+    {
+        $this->picture = $picture;
     }
 }

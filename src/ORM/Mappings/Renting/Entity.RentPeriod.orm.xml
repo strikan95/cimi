@@ -9,7 +9,9 @@
 
         <field name="startDate" type="datetime" />
         <field name="endDate" type="datetime" />
-        <many-to-one field="listing" target-entity="App\Core\Listing\Entity\Listing" inversed-by="rentPeriods"/>
+        <many-to-one field="listing" target-entity="App\Core\Listing\Entity\Listing" inversed-by="rentPeriods">
+            <join-column name="listing_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
     </entity>
 
 </doctrine-mapping>
