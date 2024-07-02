@@ -181,7 +181,7 @@ class DraftController extends AbstractController
         $image = $form->getData();
 
         /** @var User $user */
-        $user = $this->setPicture($image->getUrl());
+        $draft->addImage($image);
 
         $this->em->persist($draft);
         $this->em->flush();
