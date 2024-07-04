@@ -30,7 +30,7 @@ class Listing
     #[Assert\Length(max: 48, groups: ['description', 'all'])]
     private ?string $description = '';
 
-    #[Groups(['list', 'listing_details'])]
+    #[Groups(['list', 'draft', 'listing_details'])]
     private ?int $price = 0;
 
     #[Groups(['draft', 'list'])]
