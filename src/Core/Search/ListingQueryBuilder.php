@@ -3,6 +3,7 @@
 namespace App\Core\Search;
 
 use App\Core\Listing\Entity\Listing;
+use App\Shared\ORM\ListingStatus\ListingStatusType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
@@ -21,9 +22,9 @@ class ListingQueryBuilder
             ->createQueryBuilder()
             ->select('l as listing')
             ->from(Listing::class, 'l')
-            //->setFirstResult(0)
-            //->setMaxResults(self::PAGE_SIZE)
-            ->groupBy('l.id');
+            ->andWhere('l.status = :published')
+            ->groupBy('l.id')
+            ->setParameter('published', ListingStatusType::STATUS_APPROVED);
     }
 
     public function executeQuery()
@@ -68,16 +69,14 @@ class ListingQueryBuilder
         $this->qb->andWhere('l.host = :id')->setParameter('id', $id);
     }
 
-    private function amenityId($ids): void
+    private function amenities($ids): void
     {
         $this->qb
-            ->join('l.amenities', 'la', Expr\Join::ON)
-            ->andWhere($this->qb->expr()->in('la.id', ':amenities'))
-            ->addGroupBy('l.id')
-            ->andHaving(
-                $this->qb->expr()->eq('COUNT(DISTINCT la.id)', count($ids)),
-            )
-            ->setParameter('amenities', $ids);
+            ->leftJoin('l.amenities', 'la')
+            ->andWhere('la.id IN (:amenityIds)')
+            ->andHaving('COUNT(DISTINCT la.id) = :amenityCount')
+            ->setParameter('amenityIds', $ids)
+            ->setParameter(':amenityCount', count($ids));
     }
 
     private function priceMin($value): void

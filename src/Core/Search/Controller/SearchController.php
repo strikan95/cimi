@@ -30,13 +30,6 @@ class SearchController extends AbstractController
     {
         $qb = new ListingQueryBuilder($request, $this->em);
         $qb->apply();
-        //$listings = $qb->executeQuery();
-
-        //$q = $this->em->getRepository(Listing::class)
-        //    ->createQueryBuilder('l')
-        //    ->setFirstResult(0)
-        //    ->setMaxResults(20)
-        //    ->getQuery();
 
         $paginator = new Paginator($qb->getQb(), fetchJoinCollection: true);
         $c = count($paginator);
