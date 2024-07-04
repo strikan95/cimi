@@ -17,7 +17,7 @@ class HostController extends AbstractController
     public function __construct(private HostRepository $repository)
     {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
-            ->withGroups(['draft'])
+            ->withGroups(['draft', 'listing_details'])
             ->toArray();
     }
 
