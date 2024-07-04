@@ -2,41 +2,32 @@
 
 namespace App\Shared\DataFixtures;
 
-use App\Core\User\Entity\Embeddable\UserDetails;
-use App\Core\User\Entity\Embeddable\UserIdentity;
 use App\Core\User\Entity\User;
-use App\Core\User\Form\DataClass\UserDetailsData;
 use Doctrine\Persistence\ObjectManager;
 
 class UserFixture extends BaseFixture
 {
     protected function loadData(ObjectManager $manager): void
     {
+        // "password" hashed -> $2y$13$IsHt6.rtUY522b6vFFozju5RBS1rF1Ud.eHO74Nc.Qn5ROMSDvUQ6
+
+
         $this->createMany(User::class, 300, function (User $user, $count) {
+            $pass = "\$2y\$13\$7VVf9T3dHhjyabo0XWAbveCCiVDifM8P2WHuBf11YAPxXZKnWpX9.";
             if ($count == 0) {
-                $user->setUserIdentity(
-                    UserIdentity::build(
-                        $_SERVER['ADMIN_SUB'],
-                        $_SERVER['ADMIN_EMAIL'],
-                    ),
-                );
+                $user->setEmail('juraj.buljevic@gmail.com');
+                $user->setPassword($pass);
                 $user->setRole('ROLE_HOST');
-                $userDetails = new UserDetailsData();
-                $userDetails->firstName = $this->faker->firstName();
-                $userDetails->lastName = $this->faker->lastName();
-                $user->updateUserDetails(UserDetails::build($userDetails));
+
+                $user->setFirstName('Juraj');
+                $user->setLastName('Buljevic');
             } else {
+                $user->setEmail($this->faker->email());
+                $user->setPassword($pass);
                 $user->setRole('ROLE_HOST');
-                $user->setUserIdentity(
-                    UserIdentity::build(
-                        $this->faker->sentence(2),
-                        $this->faker->email(),
-                    ),
-                );
-                $userDetails = new UserDetailsData();
-                $userDetails->firstName = $this->faker->firstName();
-                $userDetails->lastName = $this->faker->lastName();
-                $user->updateUserDetails(UserDetails::build($userDetails));
+
+                $user->setFirstName($this->faker->firstName());
+                $user->setLastName($this->faker->lastName());
             }
         });
 

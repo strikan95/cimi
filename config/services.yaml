@@ -20,6 +20,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    acme_api.event.authentication_success_listener:
+        class: App\Shared\Service\JWT\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
     App\Shared\ExceptionHandling\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }

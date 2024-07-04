@@ -15,7 +15,6 @@ use Lcobucci\JWT\Validation\Validator;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use GetStream\StreamChat\Client as GetStreamClient;
-use GetStream\StreamChat\StreamResponse;
 
 class AccessTokenHandler implements AccessTokenHandlerInterface
 {

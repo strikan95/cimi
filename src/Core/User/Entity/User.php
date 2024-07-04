@@ -2,50 +2,42 @@
 
 namespace App\Core\User\Entity;
 
-use App\Core\User\Entity\Embeddable\UserDetails;
-use App\Core\User\Entity\Embeddable\UserIdentity;
+use App\Core\Listing\Entity\Image;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['in_listing_details'])]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private string $role;
+    #[ORM\Column(type: 'string', length: 64)]
+    private string $email;
+
+    #[ORM\Column(type: 'string', length: 128)]
+    private string $password;
+
+    #[ORM\Column(type: 'simple_array')]
+    private array $roles = [];
+
+    #[ORM\Column(type: "string", length: 50, nullable: true)]
+    private string $firstName;
+
+    #[ORM\Column(type: "string", length: 50, nullable: true)]
+    private string $lastName;
 
     #[ORM\Column(nullable: true)]
-    private ?string $picture = null;
+    private ?string $picture;
 
-    #[ORM\Embedded(class: UserIdentity::class, columnPrefix: false)]
-    #[Groups(['host'])]
-    private UserIdentity $userIdentity;
-
-    #[ORM\Embedded(class: UserDetails::class, columnPrefix: false)]
-    private ?UserDetails $userDetails = null;
-
-    public static function register(UserIdentity $userIdentity): User
+    public function User(): User
     {
-        $_user = new self();
-        $_user->role = 'ROLE_NEW';
-
-        $_user->userIdentity = $userIdentity;
-        return $_user;
-    }
-
-    public function setUserIdentity(UserIdentity $userIdentity): void
-    {
-        $this->userIdentity = $userIdentity;
-    }
-
-    public function updateUserDetails(UserDetails $userDetails): void
-    {
-        $this->userDetails = $userDetails;
+        return $this;
     }
 
     public function getId(): ?int
@@ -53,33 +45,67 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getUserIdentity(): UserIdentity
+    public function getUserIdentifier(): string
     {
-        return $this->userIdentity;
-    }
-
-    public function getUserDetails(): ?UserDetails
-    {
-        return $this->userDetails;
-    }
-
-    public function setRole(string $role): void
-    {
-        $this->role = $role;
-    }
-
-    public function getRoles(): array
-    {
-        return [$this->role];
+        return $this->email;
     }
 
     public function eraseCredentials(): void
     {
+        return;
     }
 
-    public function getUserIdentifier(): string
+    public function getPassword(): ?string
     {
-        return $this->userIdentity->getSub();
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(string $role): void
+    {
+        $this->roles = [$role];
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 
     public function getPicture(): ?string
@@ -87,8 +113,8 @@ class User implements UserInterface
         return $this->picture;
     }
 
-    public function setPicture(?string $picture): void
+    public function setPicture(Image $picture): void
     {
-        $this->picture = $picture;
+        $this->picture = $picture->getThumbnailUrl();
     }
 }

@@ -21,7 +21,7 @@ class ListingController extends AbstractController
         private ListingRepository $listingRepository,
     ) {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
-            ->withGroups(['listing_details', 'in_listing_details', 'host'])
+            ->withGroups(['listing_details', 'in_listing_details'])
             ->toArray();
     }
 

@@ -7,10 +7,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class ListingLocation
 {
-    #[Groups(['draft', 'list'])]
+    #[Groups(['draft', 'list', 'listing_details'])]
     private string $country;
 
-    #[Groups(['draft', 'list'])]
+    #[Groups(['draft', 'list', 'listing_details'])]
     private string $city;
 
     #[Groups(['draft'])]
