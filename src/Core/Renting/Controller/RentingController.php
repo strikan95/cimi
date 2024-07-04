@@ -29,6 +29,10 @@ class RentingController extends AbstractController
     ]
     public function index(Listing $listing): JsonResponse
     {
+        if ($listing->getHost() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->json(
             ['occupancy' => $listing->getRentPeriods()],
             Response::HTTP_OK,
@@ -46,6 +50,10 @@ class RentingController extends AbstractController
         Request $request,
         Listing $listing,
     ): JsonResponse {
+        if ($listing->getHost() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $rentPeriod = new RentPeriod();
         $form = $this->createForm(RentPeriodType::class, $rentPeriod);
 

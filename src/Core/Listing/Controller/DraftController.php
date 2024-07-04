@@ -27,7 +27,6 @@ class DraftController extends AbstractController
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SerializerInterface $serializer,
     ) {
         $this->serializationContext = (new ObjectNormalizerContextBuilder())
             ->withGroups(['draft', 'amenities_in_draft'])
@@ -43,6 +42,10 @@ class DraftController extends AbstractController
     ]
     public function getDraft(Listing $draft): JsonResponse
     {
+        if ($draft->getHost() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->createApiSuccessResponse($draft);
     }
 
@@ -260,6 +263,10 @@ class DraftController extends AbstractController
         Listing $draft,
         Request|array $input,
     ): JsonResponse {
+        if ($draft->getHost() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(
             DraftType::class,
             $draft,
